@@ -146,7 +146,7 @@ final class WP_Travis {
 	private function trigger_build() {
 		$options = get_option( 'wptravis_settings' );
 		$repo = urlencode( $options['wptravis_repo'] );
-		$api_url = "https://api.travis-ci.org/repo/$repo/requests";
+		$api_url = "https://api.travis-ci.com/repo/$repo/requests";
 		$token = $options['wptravis_api_key'];
 		$response = wp_remote_post( $api_url, array(
 			'method' => 'POST',
