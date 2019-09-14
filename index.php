@@ -59,6 +59,7 @@ final class WP_Travis {
 
 		// Hook post transition.
 		add_action( 'transition_post_status', array( $this, 'post_published' ), 10, 3 );
+		add_action( 'post_updated', array( $this, 'post_updated' ), 10, 3 ); 
 	} // End __construct()
 
 	/**
@@ -143,6 +144,10 @@ final class WP_Travis {
 		}
 	}
 
+	public function post_updated( $post_ID, $post_after, $post_before ) {
+		$this->trigger_build();
+	}
+
 	private function trigger_build() {
 		$options = get_option( 'wptravis_settings' );
 		$repo = urlencode( $options['wptravis_repo'] );
@@ -157,7 +162,7 @@ final class WP_Travis {
 				'Accept' => 'application/json',
 				'Authorization' => "token $token"
 			),
-			'body' => json_encode( array( 'request' => array( 'branch' => 'master' ) ) )
+			'body' => json_encode( array( 'request' => array( 'branch' => 'master', 'message' => 'Build triggered by a Wordpress post being published or updated.' ) ) )
 		) );
 	}
 } // End Class
